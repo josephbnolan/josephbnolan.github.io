@@ -1,25 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import somethings from './somethings'
+import { Button, Container } from 'react-bootstrap';
+import { useState } from 'react';
 
 function App() {
+  const [currentSomething, setCurrentSomething] = useState(somethings[0].something);
+
+  function newCurrent(newSomething) {
+    setCurrentSomething(newSomething);
+  }
+
+  function randomCurrent() {
+    setCurrentSomething(somethings[Math.floor(Math.random() * somethings.length)].something);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Container className="something__container" fluid>
+      <header className="pennies__header">
+        "Tell me something"
       </header>
-    </div>
-  );
+      <div className="thoughts__container">
+        <h2 className="thoughts__current"><span>{ currentSomething }</span></h2>
+        <div>
+          <Button onClick={ () => randomCurrent() } variant="outline-primary" size="sm" block style={ { color: '#2ab7ca', marginBottom: '1em', borderColor: '#2ab7ca' } }>
+            Random something
+          </Button>
+          <div className="thoughts__list">
+            { somethings.map((S, i) => ( <span className={ S.something === currentSomething ? 'thoughts__list--selected' : null } onClick={ () => newCurrent(S.something) } key={ i }>{ S.date }</span>)) }
+          </div>
+        </div>
+      </div>
+    </Container>
+    );
 }
 
 export default App;
